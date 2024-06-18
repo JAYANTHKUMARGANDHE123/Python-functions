@@ -1,0 +1,103 @@
+time.asctime([t])	:
+		Convert a tuple or struct_time representing a time as returned by gmtime() or localtime() to a string of the following form: 'Sun Jun 20 23:21:05 1993'. The day field is two characters long and is space padded if the day is a single digit, e.g.: 'Wed Jun  9 04:26:40 1993'.
+
+time.pthread_getcpuclockid(thread_id) :
+		Return the clk_id of the thread-specific CPU-time clock for the specified thread_id.
+
+time.clock_getres(clk_id) :
+		Return the resolution (precision) of the specified clock clk_id. Refer to Clock ID Constants for a list of accepted values for clk_id.
+
+time.clock_gettime(clk_id) → float :
+		Return the time of the specified clock clk_id. Refer to Clock ID Constants for a list of accepted values for clk_id.
+		Use clock_gettime_ns() to avoid the precision loss caused by the float type.
+
+time.clock_gettime_ns(clk_id) → int :
+		Similar to clock_gettime() but return time as nanoseconds.
+
+time.clock_settime(clk_id, time: float) :
+		Set the time of the specified clock clk_id. Currently, CLOCK_REALTIME is the only accepted value for clk_id.
+		Use clock_settime_ns() to avoid the precision loss caused by the float type.
+
+time.clock_settime_ns(clk_id, time: int) :
+		Similar to clock_settime() but set time with nanoseconds.
+
+time.ctime([secs]) :
+		Convert a time expressed in seconds since the epoch to a string of a form: 'Sun Jun 20 23:21:05 1993' representing local time. The day field is two characters long and is space padded if the day is a single digit, e.g.: 'Wed Jun  9 04:26:40 1993'.
+		If secs is not provided or None, the current time as returned by time() is used. ctime(secs) is equivalent to asctime(localtime(secs)). Locale information is not used by ctime().
+
+time.get_clock_info(name) :
+		Get information on the specified clock as a namespace object. Supported clock names and the corresponding functions to read their value are:
+
+>  'monotonic': time.monotonic()
+
+>  'perf_counter': time.perf_counter()
+
+>  'process_time': time.process_time()
+
+>  'thread_time': time.thread_time()
+
+>  'time': time.time()
+
+time.gmtime([secs]) :
+		Convert a time expressed in seconds since the epoch to a struct_time in UTC in which the dst flag is always zero. If secs is not provided or None, the current time as returned by time() is used. Fractions of a second are ignored. See above for a description of the struct_time object. See calendar.timegm() for the inverse of this function.
+
+time.localtime([secs]) :
+		Like gmtime() but converts to local time. If secs is not provided or None, the current time as returned by time() is used. The dst flag is set to 1 when DST applies to the given time.
+		localtime() may raise OverflowError, if the timestamp is outside the range of values supported by the platform C localtime() or gmtime() functions, and OSError on localtime() or gmtime() failure. It’s common for this to be restricted to years between 1970 and 2038.
+
+time.mktime(t) :
+		This is the inverse function of localtime(). Its argument is the struct_time or full 9-tuple (since the dst flag is needed; use -1 as the dst flag if it is unknown) which expresses the time in local time, not UTC. It returns a floating point number, for compatibility with time(). If the input value cannot be represented as a valid time, either OverflowError or ValueError will be raised (which depends on whether the invalid value is caught by Python or the underlying C libraries). The earliest date for which it can generate a time is platform-dependent.
+
+time.monotonic() → float :
+		Return the value (in fractional seconds) of a monotonic clock, i.e. a clock that cannot go backwards. The clock is not affected by system clock updates. The reference point of the returned value is undefined, so that only the difference between the results of two calls is valid.
+		Use monotonic_ns() to avoid the precision loss caused by the float type.
+
+time.monotonic_ns() → int :
+		Similar to monotonic(), but return time as nanoseconds.
+
+time.perf_counter() → float :
+		Return the value (in fractional seconds) of a performance counter, i.e. a clock with the highest available resolution to measure a short duration. It does include time elapsed during sleep and is system-wide. The reference point of the returned value is undefined, so that only the difference between the results of two calls is valid.
+		Use perf_counter_ns() to avoid the precision loss caused by the float type.
+
+time.perf_counter_ns() → int :
+		Similar to perf_counter(), but return time as nanoseconds.
+
+time.process_time() → float :
+		Return the value (in fractional seconds) of the sum of the system and user CPU time of the current process. It does not include time elapsed during sleep. It is process-wide by definition. The reference point of the returned value is undefined, so that only the difference between the results of two calls is valid.
+		Use process_time_ns() to avoid the precision loss caused by the float type.
+
+time.process_time_ns() → int :
+		Similar to process_time() but return time as nanoseconds.
+
+time.sleep(secs) :
+		Suspend execution of the calling thread for the given number of seconds. The argument may be a floating point number to indicate a more precise sleep time.
+
+time.strftime(format[, t]) :
+		Convert a tuple or struct_time representing a time as returned by gmtime() or localtime() to a string as specified by the format argument. If t is not provided, the current time as returned by localtime() is used. format must be a string. ValueError is raised if any field in t is outside of the allowed range.
+
+time.strptime(string[, format]) :
+		Parse a string representing a time according to a format. The return value is a struct_time as returned by gmtime() or localtime().
+	For example:
+>>>import time
+>>>time.strptime("30 Nov 00", "%d %b %y")   
+time.struct_time(tm_year=2000, tm_mon=11, tm_mday=30, tm_hour=0, tm_min=0,
+                 tm_sec=0, tm_wday=3, tm_yday=335, tm_isdst=-1)
+
+class time.struct_time :
+		The type of the time value sequence returned by gmtime(), localtime(), and strptime(). It is an object with a named tuple interface: values can be accessed by index and by attribute name.
+
+time.time() → float :
+		Return the time in seconds since the epoch as a floating point number. The handling of leap seconds is platform dependent. On Windows and most Unix systems, the leap seconds are not counted towards the time in seconds since the epoch. This is commonly referred to as Unix time.
+
+time.time_ns() → int :
+		Similar to time() but returns time as an integer number of nanoseconds since the epoch.
+
+time.thread_time() → float :
+		Return the value (in fractional seconds) of the sum of the system and user CPU time of the current thread. It does not include time elapsed during sleep. It is thread-specific by definition. The reference point of the returned value is undefined, so that only the difference between the results of two calls in the same thread is valid.
+		Use thread_time_ns() to avoid the precision loss caused by the float type.
+
+time.thread_time_ns() → int :
+		Similar to thread_time() but return time as nanoseconds.
+
+time.tzset() :
+		Reset the time conversion rules used by the library routines. The environment variable TZ specifies how this is done. It will also set the variables tzname (from the TZ environment variable), timezone (non-DST seconds West of UTC), altzone (DST seconds west of UTC) and daylight (to 0 if this timezone does not have any daylight saving time rules, or to nonzero if there is a time, past, present or future when daylight saving time applies).
